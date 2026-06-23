@@ -13,25 +13,56 @@ _CFG_SELECTOR = {"IVA1": "0", "IVA2": "1", "IVA3": "2"}
 class ConfigMixin:
     """F6 — Configuración fiscal."""
 
-    def do_company(self, source, reader, entity, line):
+    def ensure_company_from_emp(self, source, reader):
+        """Crea/actualiza una ``res.company`` desde ``F_EMP`` (idempotente por
+        ``CODEMP``). Devuelve la compañía, o ``None`` si no hay ``F_EMP``.
+
+        En *dry-run* no escribe: devuelve la compañía ya creada o ``None``.
+        """
         if not reader.has_table("F_EMP"):
-            return _stats()
+            return None
         rows = reader.read_all("F_EMP")
         if not rows:
-            return _stats()
+            return None
+        r = rows[0]
+        code = self.s(r, "CODEMP") or (source.company_code or "FS")
+        xmlid = self.dim_xmlid("emp", code)
+        if self.dry_run:
+            return self.ref(xmlid)
+        vals = {"name": self.s(r, "DENEMP") or ("Empresa %s" % code)}
+        for src_f, dst in (("DOMEMP", "street"), ("POBEMP", "city"), ("CPOEMP", "zip")):
+            v = self.s(r, src_f)
+            if v:
+                vals[dst] = v
+        vat = self.cv(r.get("NIFEMP") or r.get("CIFEMP") or r.get("DNIEMP"), "vat")
+        if vat:
+            vals["vat"] = vat
+        ar = self.env.ref("base.ar", raise_if_not_found=False)
+        if ar:
+            vals["country_id"] = ar.id
+            state = self._resolve_state(self.s(r, "PROEMP"))
+            if state:
+                vals["state_id"] = state.id
+        company = self.upsert("res.company", xmlid, vals)
+        # Plan de cuentas (si la compañía aún no tiene), reutilizando l10n_*.
+        tmpl = (self.run.company_chart_template or "").strip()
+        if company and tmpl and not company.chart_template:
+            try:
+                self.env["account.chart.template"].try_loading(
+                    tmpl, company, install_demo=False)
+            except Exception as exc:  # noqa: BLE001
+                self.log("warning", "company", code,
+                         "No se pudo cargar el plan '%s': %s" % (tmpl, exc),
+                         year=source.fiscal_year)
+        return company
+
+    def do_company(self, source, reader, entity, line):
+        company = self.ensure_company_from_emp(source, reader)
         if self.dry_run:
             return _stats(1, 1, 0)
-        r = rows[0]
-        company = self.company
-        vals = {}
-        if not company.street and self.s(r, "DOMEMP"):
-            vals["street"] = self.s(r, "DOMEMP")
-        if not company.city and self.s(r, "POBEMP"):
-            vals["city"] = self.s(r, "POBEMP")
-        if not company.zip and self.s(r, "CPOEMP"):
-            vals["zip"] = self.s(r, "CPOEMP")
-        if vals:
-            company.write(vals)
+        if not company:
+            return _stats(0, 0, 1)
+        self.company = company
         return _stats(1, 1, 0)
 
     def do_taxes(self, source, reader, entity, line):

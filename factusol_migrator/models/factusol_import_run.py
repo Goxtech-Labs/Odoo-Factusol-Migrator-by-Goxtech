@@ -20,8 +20,22 @@ class FactusolImportRun(models.Model):
 
     name = fields.Char(compute="_compute_name", store=True)
     company_id = fields.Many2one(
-        "res.company", string="Compañía destino", required=True,
+        "res.company", string="Compañía destino",
         default=lambda self: self.env.company,
+        help="Compañía donde se cargan los datos. Si 'Compañía' = crear desde "
+             "F_EMP, se reemplaza por la compañía creada.",
+    )
+    company_mode = fields.Selection(
+        [("create", "Crear/actualizar desde F_EMP"),
+         ("existing", "Usar la compañía destino")],
+        string="Compañía", default="create", required=True,
+        help="'Crear desde F_EMP': el migrador crea (o reutiliza) la res.company "
+             "con la razón social, domicilio y NIF de FactuSol.",
+    )
+    company_chart_template = fields.Char(
+        string="Plan de cuentas (si se crea)", default="ar_ri",
+        help="Plantilla de localización a cargar en la compañía creada "
+             "(ej. ar_ri). Vacío = no cargar plan.",
     )
     source_ids = fields.Many2many("factusol.source", string="Bases (años)")
     profile_id = fields.Many2one("factusol.import.profile", string="Perfil")
@@ -93,6 +107,9 @@ class FactusolImportRun(models.Model):
             raise UserError(_(
                 "Analice las bases antes de migrar (estado 'Listo'): %s"
             ) % ", ".join(not_ready.mapped("name")))
+        if self.company_mode == "existing" and not self.company_id:
+            raise UserError(_(
+                "Elegí la compañía destino, o usá 'Crear/actualizar desde F_EMP'."))
 
         # Limpia resultados previos de este run.
         self.log_ids.unlink()
@@ -104,12 +121,20 @@ class FactusolImportRun(models.Model):
         summary = {}
 
         self.write({"date_start": fields.Datetime.now(), "dry_run": dry_run})
+        company_created = False
         for source in sources:
             try:
                 reader = source.get_reader()
             except Exception as exc:  # noqa: BLE001
                 engine.log("error", "source", source.name, str(exc), year=source.fiscal_year)
                 continue
+            # Crear (o reutilizar) la compañía desde F_EMP y dirigir la carga a ella.
+            if self.company_mode == "create" and not company_created:
+                company = engine.ensure_company_from_emp(source, reader)
+                if company and not dry_run:
+                    engine.company = company
+                    self.company_id = company.id
+                company_created = True
             year_key = str(source.fiscal_year or 0)
             ybucket = summary.setdefault(year_key, {})
             for entity in plan:

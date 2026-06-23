@@ -29,9 +29,16 @@
                     <!-- PASO 2 -->
                     <group invisible="step != 'select'">
                         <div class="oe_grey">
-                            <p>Elija el <b>perfil</b> (qué importar) y confirme los
-                               <b>años</b> detectados. Puede quitar los que no quiera migrar.</p>
+                            <p>Elija la <b>compañía</b>, el <b>perfil</b> (qué importar) y
+                               confirme los <b>años</b> detectados. Puede quitar los que no
+                               quiera migrar.</p>
                         </div>
+                        <field name="company_mode" widget="radio"/>
+                        <field name="company_chart_template"
+                               invisible="company_mode != 'create'"/>
+                        <field name="company_id" options="{'no_create': True}"
+                               invisible="company_mode != 'existing'"
+                               required="company_mode == 'existing'"/>
                         <field name="profile_id" options="{'no_create': False}"/>
                         <field name="source_ids" widget="many2many">
                             <list>

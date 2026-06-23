@@ -16,9 +16,18 @@ class FactusolImportWizard(models.TransientModel):
          ("migrate", "4 · Migrar y verificar")],
         default="upload", required=True,
     )
+    company_mode = fields.Selection(
+        [("create", "Crear/actualizar la compañía desde la base (F_EMP)"),
+         ("existing", "Usar una compañía existente")],
+        string="Compañía", default="create", required=True,
+    )
     company_id = fields.Many2one(
-        "res.company", string="Compañía destino", required=True,
+        "res.company", string="Compañía destino",
         default=lambda self: self.env.company,
+    )
+    company_chart_template = fields.Char(
+        string="Plan de cuentas", default="ar_ri",
+        help="Plantilla a cargar en la compañía creada (ej. ar_ri). Vacío = sin plan.",
     )
     file_ids = fields.One2many("factusol.import.wizard.file", "wizard_id", string="Ficheros .accdb")
     source_ids = fields.Many2many("factusol.source", string="Bases detectadas (años)")
@@ -80,6 +89,8 @@ class FactusolImportWizard(models.TransientModel):
             raise UserError(_("Seleccione al menos una base (año)."))
         vals = {
             "company_id": self.company_id.id,
+            "company_mode": self.company_mode,
+            "company_chart_template": self.company_chart_template,
             "source_ids": [(6, 0, self.source_ids.ids)],
             "profile_id": self.profile_id.id if self.profile_id else False,
         }
