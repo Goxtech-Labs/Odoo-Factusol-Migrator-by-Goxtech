@@ -1,0 +1,19 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_factusol_source_user,source user,model_factusol_source,group_factusol_user,1,0,0,0
+access_factusol_source_manager,source manager,model_factusol_source,group_factusol_manager,1,1,1,1
+access_factusol_table_profile_user,table profile user,model_factusol_table_profile,group_factusol_user,1,0,0,0
+access_factusol_table_profile_manager,table profile manager,model_factusol_table_profile,group_factusol_manager,1,1,1,1
+access_factusol_field_mapping_user,field mapping user,model_factusol_field_mapping,group_factusol_user,1,0,0,0
+access_factusol_field_mapping_manager,field mapping manager,model_factusol_field_mapping,group_factusol_manager,1,1,1,1
+access_factusol_import_profile_user,import profile user,model_factusol_import_profile,group_factusol_user,1,0,0,0
+access_factusol_import_profile_manager,import profile manager,model_factusol_import_profile,group_factusol_manager,1,1,1,1
+access_factusol_import_profile_line_user,import profile line user,model_factusol_import_profile_line,group_factusol_user,1,0,0,0
+access_factusol_import_profile_line_manager,import profile line manager,model_factusol_import_profile_line,group_factusol_manager,1,1,1,1
+access_factusol_staging_row_user,staging row user,model_factusol_staging_row,group_factusol_user,1,0,0,0
+access_factusol_staging_row_manager,staging row manager,model_factusol_staging_row,group_factusol_manager,1,1,1,1
+access_factusol_import_run_user,import run user,model_factusol_import_run,group_factusol_user,1,0,0,0
+access_factusol_import_run_manager,import run manager,model_factusol_import_run,group_factusol_manager,1,1,1,1
+access_factusol_import_log_user,import log user,model_factusol_import_log,group_factusol_user,1,0,0,0
+access_factusol_import_log_manager,import log manager,model_factusol_import_log,group_factusol_manager,1,1,1,1
+access_factusol_import_wizard_manager,import wizard manager,model_factusol_import_wizard,group_factusol_manager,1,1,1,1
+access_factusol_import_wizard_file_manager,import wizard file manager,model_factusol_import_wizard_file,group_factusol_manager,1,1,1,1

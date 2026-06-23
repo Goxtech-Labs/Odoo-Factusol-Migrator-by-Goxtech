@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Factura / asiento: pestaña FactuSol -->
+    <record id="view_move_form_factusol" model="ir.ui.view">
+        <field name="name">account.move.form.factusol</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="FactuSol" name="factusol">
+                    <group>
+                        <group string="Origen FactuSol">
+                            <field name="x_factusol_ref"/>
+                            <field name="x_factusol_serie"/>
+                            <field name="x_factusol_code"/>
+                            <field name="x_factusol_year"/>
+                        </group>
+                        <group string="Fiscal / Comercial">
+                            <field name="x_factusol_iva_regime"/>
+                            <field name="x_factusol_agent_code"/>
+                            <field name="x_factusol_commission_rate"/>
+                            <field name="x_factusol_commission_amount"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Pedido / presupuesto de venta: pestaña FactuSol -->
+    <record id="view_order_form_factusol" model="ir.ui.view">
+        <field name="name">sale.order.form.factusol</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="FactuSol" name="factusol">
+                    <group>
+                        <group string="Origen FactuSol">
+                            <field name="x_factusol_ref"/>
+                            <field name="x_factusol_serie"/>
+                            <field name="x_factusol_code"/>
+                            <field name="x_factusol_year"/>
+                        </group>
+                        <group string="Fiscal / Comercial">
+                            <field name="x_factusol_iva_regime"/>
+                            <field name="x_factusol_agent_code"/>
+                            <field name="x_factusol_commission_rate"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Pedido de compra: pestaña FactuSol -->
+    <record id="view_purchase_order_form_factusol" model="ir.ui.view">
+        <field name="name">purchase.order.form.factusol</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="FactuSol" name="factusol">
+                    <group>
+                        <group string="Origen FactuSol">
+                            <field name="x_factusol_ref"/>
+                            <field name="x_factusol_serie"/>
+                            <field name="x_factusol_code"/>
+                            <field name="x_factusol_year"/>
+                        </group>
+                        <group string="Fiscal / Comercial">
+                            <field name="x_factusol_iva_regime"/>
+                            <field name="x_factusol_agent_code"/>
+                            <field name="x_factusol_commission_rate"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

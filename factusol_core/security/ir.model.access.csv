@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_factusol_tax_map_user,factusol.tax.map read,model_factusol_tax_map,base.group_user,1,0,0,0
+access_factusol_tax_map_account_manager,factusol.tax.map manage,model_factusol_tax_map,account.group_account_manager,1,1,1,1

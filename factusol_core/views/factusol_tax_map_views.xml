@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_factusol_tax_map_list" model="ir.ui.view">
+        <field name="name">factusol.tax.map.list</field>
+        <field name="model">factusol.tax.map</field>
+        <field name="arch" type="xml">
+            <list string="Traducción de IVA FactuSol" editable="bottom">
+                <field name="company_id" groups="base.group_multi_company" optional="show"/>
+                <field name="factusol_selector"/>
+                <field name="tax_type"/>
+                <field name="origin_percent"/>
+                <field name="tax_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_factusol_tax_map_form" model="ir.ui.view">
+        <field name="name">factusol.tax.map.form</field>
+        <field name="model">factusol.tax.map</field>
+        <field name="arch" type="xml">
+            <form string="Traducción de IVA FactuSol">
+                <sheet>
+                    <group>
+                        <group string="Origen (FactuSol)">
+                            <field name="factusol_selector"/>
+                            <field name="tax_type"/>
+                            <field name="origin_percent"/>
+                        </group>
+                        <group string="Destino (Odoo)">
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="tax_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_factusol_tax_map" model="ir.actions.act_window">
+        <field name="name">Traducción de IVA (FactuSol)</field>
+        <field name="res_model">factusol.tax.map</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Asigne cada selector de IVA de FactuSol a un impuesto de Odoo</p>
+            <p>
+                FactuSol guarda el IVA por línea como un <b>selector</b>
+                (0=IVA1, 1=IVA2, 2=IVA3, 3=Exento). Aquí define a qué
+                <b>impuesto de Odoo</b> corresponde cada uno, por compañía y uso
+                (venta / compra).
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_factusol_tax_map"
+              name="Traducción de IVA (FactuSol)"
+              parent="account.menu_finance_configuration"
+              action="action_factusol_tax_map"
+              sequence="100"/>
+
+</odoo>

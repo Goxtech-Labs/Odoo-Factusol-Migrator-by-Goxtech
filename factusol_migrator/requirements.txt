@@ -1,0 +1,7 @@
+# Lectura de .accdb en Python puro. Con cualquiera de estos alcanza; el
+# AccessReader degrada automáticamente entre backends.
+# Primario (lazy, soporta cifrado):
+pyaccdb
+# Fallback puro-python:
+access-parser
+# 'mdbtools' es OPCIONAL y a nivel sistema (no pip); nunca es requisito.

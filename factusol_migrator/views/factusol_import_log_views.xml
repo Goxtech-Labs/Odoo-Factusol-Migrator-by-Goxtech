@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_factusol_import_log_list" model="ir.ui.view">
+        <field name="name">factusol.import.log.list</field>
+        <field name="model">factusol.import.log</field>
+        <field name="arch" type="xml">
+            <list string="Incidencias">
+                <field name="run_id"/>
+                <field name="level" widget="badge"
+                       decoration-danger="level == 'error'"
+                       decoration-warning="level == 'warning'"/>
+                <field name="fiscal_year"/>
+                <field name="entity"/>
+                <field name="key"/>
+                <field name="message"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_factusol_import_log_form" model="ir.ui.view">
+        <field name="name">factusol.import.log.form</field>
+        <field name="model">factusol.import.log</field>
+        <field name="arch" type="xml">
+            <form string="Incidencia">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="run_id"/>
+                            <field name="level"/>
+                            <field name="state"/>
+                        </group>
+                        <group>
+                            <field name="entity"/>
+                            <field name="fiscal_year"/>
+                            <field name="key"/>
+                            <field name="field"/>
+                        </group>
+                    </group>
+                    <field name="message"/>
+                    <field name="payload"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_factusol_import_log" model="ir.actions.act_window">
+        <field name="name">Incidencias</field>
+        <field name="res_model">factusol.import.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

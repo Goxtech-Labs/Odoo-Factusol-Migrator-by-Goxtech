@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_factusol_import_wizard_form" model="ir.ui.view">
+        <field name="name">factusol.import.wizard.form</field>
+        <field name="model">factusol.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Migración FactuSol">
+                <header>
+                    <field name="step" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <!-- PASO 1 -->
+                    <group invisible="step != 'upload'">
+                        <div class="oe_grey">
+                            <p>Suba <b>una o varias</b> bases <b>.accdb</b> de FactuSol
+                               (una por ejercicio). Si están cifradas, indique la contraseña.</p>
+                        </div>
+                        <field name="company_id" options="{'no_create': True}"/>
+                        <field name="file_ids">
+                            <list editable="bottom">
+                                <field name="accdb_file" filename="file_name"/>
+                                <field name="file_name"/>
+                                <field name="password" password="True"/>
+                            </list>
+                        </field>
+                    </group>
+
+                    <!-- PASO 2 -->
+                    <group invisible="step != 'select'">
+                        <div class="oe_grey">
+                            <p>Elija el <b>perfil</b> (qué importar) y confirme los
+                               <b>años</b> detectados. Puede quitar los que no quiera migrar.</p>
+                        </div>
+                        <field name="profile_id" options="{'no_create': False}"/>
+                        <field name="source_ids" widget="many2many">
+                            <list>
+                                <field name="company_code"/>
+                                <field name="fiscal_year"/>
+                                <field name="backend"/>
+                                <field name="table_count"/>
+                                <field name="state" widget="badge"/>
+                            </list>
+                        </field>
+                    </group>
+
+                    <!-- PASO 3 -->
+                    <group invisible="step != 'preview'">
+                        <div class="oe_grey">
+                            <p>Previsualización (<b>sin escribir</b> en Odoo). Revise los
+                               conteos y avisos. Si todo cuadra, pulse <b>Migrar</b>.</p>
+                        </div>
+                        <field name="preview_html" nolabel="1"/>
+                    </group>
+
+                    <!-- PASO 4 -->
+                    <group invisible="step != 'migrate'">
+                        <div class="oe_grey">
+                            <p>Migración realizada. Informe de fidelidad por año:</p>
+                        </div>
+                        <field name="preview_html" nolabel="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_scan" type="object" string="Analizar bases →"
+                            class="btn-primary" invisible="step != 'upload'"/>
+
+                    <button name="action_dry_run" type="object" string="Previsualizar →"
+                            class="btn-primary" invisible="step != 'select'"/>
+                    <button name="action_back_to_upload" type="object" string="← Volver"
+                            invisible="step != 'select'"/>
+
+                    <button name="action_migrate" type="object" string="Migrar ahora"
+                            class="btn-primary" invisible="step != 'preview'"
+                            confirm="Se cargarán los datos en Odoo. ¿Continuar?"/>
+                    <button name="action_back_to_select" type="object" string="← Volver"
+                            invisible="step != 'preview'"/>
+
+                    <button name="action_open_run" type="object" string="Ver ejecución"
+                            class="btn-primary" invisible="step != 'migrate'"/>
+                    <button string="Cerrar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_factusol_import_wizard" model="ir.actions.act_window">
+        <field name="name">Importar de FactuSol</field>
+        <field name="res_model">factusol.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

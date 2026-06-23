@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Triple descuento en las líneas de venta -->
+    <record id="view_order_form_factusol_lines" model="ir.ui.view">
+        <field name="name">sale.order.form.factusol.lines</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/list/field[@name='discount']" position="after">
+                <field name="x_disc1" optional="hide"/>
+                <field name="x_disc2" optional="hide"/>
+                <field name="x_disc3" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Triple descuento en las líneas de compra -->
+    <record id="view_purchase_order_form_factusol_lines" model="ir.ui.view">
+        <field name="name">purchase.order.form.factusol.lines</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/list/field[@name='discount']" position="after">
+                <field name="x_disc1" optional="hide"/>
+                <field name="x_disc2" optional="hide"/>
+                <field name="x_disc3" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Triple descuento en las líneas de factura -->
+    <record id="view_move_form_factusol_lines" model="ir.ui.view">
+        <field name="name">account.move.form.factusol.lines</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_line_ids']/list/field[@name='discount']" position="after">
+                <field name="x_disc1" optional="hide"/>
+                <field name="x_disc2" optional="hide"/>
+                <field name="x_disc3" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

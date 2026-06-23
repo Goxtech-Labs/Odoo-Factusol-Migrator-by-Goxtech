@@ -1,0 +1,10 @@
+FactuSol Odoo by GoxTech
+Copyright (C) GoxTech
+
+Esta suite se distribuye bajo la licencia GNU Lesser General Public License v3.0 (LGPL-3),
+la misma familia de licencias que usan los módulos de Odoo Community.
+
+Texto completo de la licencia: https://www.gnu.org/licenses/lgpl-3.0.html
+
+Cada addon declara "license": "LGPL-3" en su __manifest__.py.
+Reemplazar/añadir el texto íntegro de la LGPL-3 en este archivo al publicar el repositorio.

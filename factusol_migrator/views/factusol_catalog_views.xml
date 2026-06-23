@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_factusol_table_profile_list" model="ir.ui.view">
+        <field name="name">factusol.table.profile.list</field>
+        <field name="model">factusol.table.profile</field>
+        <field name="arch" type="xml">
+            <list string="Catálogo de tablas FactuSol">
+                <field name="load_order"/>
+                <field name="plane"/>
+                <field name="entity_code"/>
+                <field name="name"/>
+                <field name="table"/>
+                <field name="line_table"/>
+                <field name="odoo_model"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_factusol_table_profile_form" model="ir.ui.view">
+        <field name="name">factusol.table.profile.form</field>
+        <field name="model">factusol.table.profile</field>
+        <field name="arch" type="xml">
+            <form string="Tabla FactuSol">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="entity_code"/>
+                            <field name="name"/>
+                            <field name="plane"/>
+                            <field name="load_order"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="table"/>
+                            <field name="line_table"/>
+                            <field name="odoo_model"/>
+                            <field name="xmlid_prefix"/>
+                        </group>
+                    </group>
+                    <field name="mapping_ids">
+                        <list editable="bottom">
+                            <field name="source_field"/>
+                            <field name="target_field"/>
+                            <field name="transform"/>
+                            <field name="is_key" widget="boolean_toggle"/>
+                            <field name="include" widget="boolean_toggle"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_factusol_table_profile" model="ir.actions.act_window">
+        <field name="name">Catálogo de tablas</field>
+        <field name="res_model">factusol.table.profile</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

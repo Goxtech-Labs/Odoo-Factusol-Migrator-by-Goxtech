@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_factusol_import_run_list" model="ir.ui.view">
+        <field name="name">factusol.import.run.list</field>
+        <field name="model">factusol.import.run</field>
+        <field name="arch" type="xml">
+            <list string="Ejecuciones">
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="profile_id"/>
+                <field name="count_source"/>
+                <field name="count_ok"/>
+                <field name="count_failed" decoration-danger="count_failed &gt; 0"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'done'"
+                       decoration-warning="state == 'preview'"
+                       decoration-danger="state == 'failed'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_factusol_import_run_form" model="ir.ui.view">
+        <field name="name">factusol.import.run.form</field>
+        <field name="model">factusol.import.run</field>
+        <field name="arch" type="xml">
+            <form string="Ejecución de migración">
+                <header>
+                    <button name="action_dry_run" type="object" string="Previsualizar (dry-run)"/>
+                    <button name="action_migrate" type="object" string="Migrar"
+                            class="btn-primary"
+                            confirm="Se cargarán los datos en Odoo. ¿Continuar?"/>
+                    <button name="action_reprocess_failed" type="object"
+                            string="Reprocesar fallidos"
+                            invisible="count_failed == 0"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="company_id"/>
+                            <field name="profile_id"/>
+                            <field name="dry_run"/>
+                        </group>
+                        <group>
+                            <field name="count_source"/>
+                            <field name="count_ok"/>
+                            <field name="count_failed"/>
+                            <field name="count_skipped"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                    </group>
+                    <field name="source_ids" widget="many2many_tags"/>
+                    <notebook>
+                        <page string="Informe de fidelidad" name="fidelity">
+                            <field name="fidelity_html" nolabel="1"/>
+                        </page>
+                        <page string="Incidencias" name="logs">
+                            <field name="log_ids" nolabel="1">
+                                <list>
+                                    <field name="level" widget="badge"
+                                           decoration-danger="level == 'error'"
+                                           decoration-warning="level == 'warning'"/>
+                                    <field name="fiscal_year"/>
+                                    <field name="entity"/>
+                                    <field name="key"/>
+                                    <field name="field"/>
+                                    <field name="message"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_factusol_import_run" model="ir.actions.act_window">
+        <field name="name">Ejecuciones</field>
+        <field name="res_model">factusol.import.run</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>
